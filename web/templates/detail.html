@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en"><!-- Basic -->
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+     <!-- Site Metas -->
+    <title> {{post}} </title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Site Icons -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+	<!-- Site CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+	<!-- Start blog details -->
+	<div class="blog-box">
+		<div class="container">
+
+			<div class="row">
+				<div class="col-xl-8 col-lg-8 col-12">
+					<div class="blog-inner-details-page">
+						<div class="blog-inner-box">
+							<div class="side-blog-img">
+								<img class="img-fluid" src="{{post.Image.url}}" alt="">
+								<div class="date-blog-up">
+									{{post.created_time|date}}
+								</div>
+							</div>
+							<div class="inner-blog-detail details-page">
+								<h3> {{post}} </h3>
+								<ul>
+									<li><i class="zmdi zmdi-account"></i>Posted By : <span> {{post.author}} </span></li>
+									<li>|</li>
+									<li><i class="zmdi zmdi-time"></i>Time : <span> {{post.created_time}} </span></li>
+								</ul>
+								<p> {{post.content}} </p>
+							</div>
+						</div>
+						<div class="blog-comment-box">
+							<h3>Comments</h3>
+							{% for cm in comments %}
+							<div class="comment-item">
+								<div class="comment-item-left">
+									<img src="images/avt-img.jpg" alt="">
+								</div>
+								<div class="comment-item-right">
+									<div class="pull-left">
+										<a href="#"> {{cm.name}} </a>
+									</div>
+									<div class="pull-right">
+										<i class="fa fa-clock-o" aria-hidden="true"></i>Time : <span> {{cm.date|time}} </span>
+									</div>
+									<div class="des-l">
+										<p> {{cm.message}} </p>
+									</div>
+									<a href="#" class="right-btn-re"><i class="fa fa-reply" aria-hidden="true"></i> Reply</a>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+						<div class="comment-respond-box">
+							<h3>Leave your comment </h3>
+							<div class="comment-respond-form">
+								<form id="commentrespondform" class="comment-form-respond row" method="post">
+									
+									{% csrf_token %}
+
+									<div class="col-lg-6 col-md-6 col-sm-6">
+										<div class="form-group">
+											<input id="name_com" class="form-control" name="name" placeholder="Name" type="text">
+										</div>
+										<div class="form-group">
+											<input id="email_com" class="form-control" name="email" placeholder="Your Email" type="email">
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-6 col-sm-6">
+										<div class="form-group">
+											<textarea class="form-control" name="message" id="textarea_com" placeholder="Your Message" rows="2"></textarea>
+										</div>
+									</div>
+									<div class="col-lg-12 col-md-12 col-sm-12">
+										<button class="btn btn-submit" type="submit">Submit comment</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xl-4 col-lg-4 col-md-6 col-sm-8 col-12 blog-sidebar">
+					<div class="right-side-blog">
+						<h3>Search</h3>
+						<div class="blog-search-form">
+							<input name="search" placeholder="Search blog" type="text">
+							<button class="search-btn">
+								<i class="fa fa-search" aria-hidden="true"></i>
+							</button>
+						</div>
+						<h3>Categories</h3>
+						<div class="blog-categories">
+							{% for i in category %}
+							<ul>
+								<li><a href="{% url 'web:category' i.english_title %}"><span> {{i}} </span></a></li>
+							</ul>
+							{% endfor %}
+						</div>
+						<h3>Recent Post</h3>
+						<div class="post-box-blog">
+							<div class="recent-post-box">
+								{% for i in recents %}
+								<a href="{{i.id}}"> <div class="recent-box-blog">
+									<div class="recent-img">
+										<img class="img-fluid" src="{{i.Image.url}}" style="height: 50px;" alt="">
+									</div>
+									<div class="recent-info">
+										<ul>
+											<li><i class="zmdi zmdi-account"></i>Posted By : <span> {{i.author}} </span></li>
+											<li>|</li>
+											<li><i class="zmdi zmdi-time"></i>Time : <span> {{i.created_time}} </span></li>
+										</ul>
+										<h4> {{i.Description|truncatewords:20}} </h4>
+									</div>
+								</div>
+								</a>
+								{% endfor %}
+							</div>
+						</div>
+						<h3>Recent Tag</h3>
+						<div class="blog-tag-box">
+							<ul class="list-inline tag-list">
+								{% for i in tags %}
+								<li class="list-inline-item"><a href="{% url 'web:tag' i.slug  %}"> {{i}} </a></li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- End details -->
+
+
+	<a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
+
+	<!-- ALL JS FILES -->
+	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'js/popper.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- ALL PLUGINS -->
+
+	<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+	<script src="{% static 'js/images-loded.min.js' %}"></script>
+	<script src="{% static 'js/isotope.min.js' %}"></script>
+	<script src="{% static 'js/baguetteBox.min.js' %}"></script>
+	<script src="{% static 'js/form-validator.min.js' %}"></script>
+    <script src="{% static 'js/contact-form-script.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+</body>
+</html>
